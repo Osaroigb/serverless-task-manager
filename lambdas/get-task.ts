@@ -9,7 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
 const dynamoDb = new DynamoDB.DocumentClient();
 
 const TABLE_NAME = process.env.TABLE_NAME!;
-if (!TABLE_NAME) throw new Error('TABLE_NAME environment variable is not defined');
+if (!TABLE_NAME)
+  throw new Error('TABLE_NAME environment variable is not defined');
 
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
   // Extract taskId from the path parameters
@@ -25,10 +26,12 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
 
   try {
     // Fetch the task from DynamoDB
-    const result = await dynamoDb.get({
-      TableName: TABLE_NAME,
-      Key: { taskId },
-    }).promise();
+    const result = await dynamoDb
+      .get({
+        TableName: TABLE_NAME,
+        Key: { taskId },
+      })
+      .promise();
 
     // Check if the task exists
     if (!result.Item) {
@@ -45,7 +48,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     };
   } catch (error) {
     console.error(`Error fetching task with taskId ${taskId}:`, error);
-    
+
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Could not fetch task' }),

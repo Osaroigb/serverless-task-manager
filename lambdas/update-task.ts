@@ -10,7 +10,8 @@ if (process.env.NODE_ENV !== 'production') {
 const dynamoDb = new DynamoDB.DocumentClient();
 
 const TABLE_NAME = process.env.TABLE_NAME!;
-if (!TABLE_NAME) throw new Error('TABLE_NAME environment variable is not defined');
+if (!TABLE_NAME)
+  throw new Error('TABLE_NAME environment variable is not defined');
 
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
   const taskId = event.pathParameters?.taskId as string;
@@ -29,7 +30,9 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
   if (!title && !description && !status) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: 'At least one of title, description, or status must be provided' }),
+      body: JSON.stringify({
+        error: 'At least one of title, description, or status must be provided',
+      }),
     };
   }
 
@@ -59,14 +62,16 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
 
   try {
     // Update the task in DynamoDB
-    const result = await dynamoDb.update({
-      TableName: TABLE_NAME,
-      Key: { taskId },
-      UpdateExpression: updateExpressionString,
-      ExpressionAttributeNames,
-      ExpressionAttributeValues,
-      ReturnValues: 'ALL_NEW',
-    }).promise();
+    const result = await dynamoDb
+      .update({
+        TableName: TABLE_NAME,
+        Key: { taskId },
+        UpdateExpression: updateExpressionString,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+        ReturnValues: 'ALL_NEW',
+      })
+      .promise();
 
     // Return the updated task
     return {

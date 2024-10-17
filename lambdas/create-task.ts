@@ -1,4 +1,3 @@
-
 import * as dotenv from 'dotenv';
 import { DynamoDB } from 'aws-sdk';
 import { APIGatewayEvent, Context } from 'aws-lambda';
@@ -10,8 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
 const dynamoDb = new DynamoDB.DocumentClient();
 
 const TABLE_NAME = process.env.TABLE_NAME!;
-if (!TABLE_NAME) throw new Error('TABLE_NAME environment variable is not defined');
-
+if (!TABLE_NAME)
+  throw new Error('TABLE_NAME environment variable is not defined');
 
 export const handler = async (event: APIGatewayEvent, context: Context) => {
   try {
@@ -35,10 +34,12 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
     };
 
     // Insert the new task into DynamoDB
-    await dynamoDb.put({
-      TableName: TABLE_NAME,
-      Item: task,
-    }).promise();
+    await dynamoDb
+      .put({
+        TableName: TABLE_NAME,
+        Item: task,
+      })
+      .promise();
 
     return {
       statusCode: 201,
