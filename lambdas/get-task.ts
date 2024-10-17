@@ -1,18 +1,15 @@
-import * as dotenv from 'dotenv';
 import { DynamoDB } from 'aws-sdk';
-import { APIGatewayEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
+const TABLE_NAME = 'TasksTable';
+const dynamoDb = new DynamoDB.DocumentClient({
+  endpoint: 'http://host.docker.internal:8000',
+});
 
-const dynamoDb = new DynamoDB.DocumentClient();
-
-const TABLE_NAME = process.env.TABLE_NAME!;
-if (!TABLE_NAME)
-  throw new Error('TABLE_NAME environment variable is not defined');
-
-export const handler = async (event: APIGatewayEvent, _context: Context) => {
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  _context: Context,
+) => {
   // Extract taskId from the path parameters
   const taskId = event.pathParameters?.taskId as string;
 
@@ -21,6 +18,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'taskId is required' }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 
@@ -38,6 +36,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       return {
         statusCode: 404,
         body: JSON.stringify({ error: 'Task not found' }),
+        headers: { 'Content-Type': 'application/json' },
       };
     }
 
@@ -45,6 +44,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 200,
       body: JSON.stringify(result.Item),
+      headers: { 'Content-Type': 'application/json' },
     };
   } catch (error) {
     console.error(`Error fetching task with taskId ${taskId}:`, error);
@@ -52,6 +52,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Could not fetch task' }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 };

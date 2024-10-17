@@ -1,17 +1,10 @@
-import * as dotenv from 'dotenv';
 import { DynamoDB } from 'aws-sdk';
 import { APIGatewayEvent, Context } from 'aws-lambda';
 
-// Load environment variables in local development
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
-
-const dynamoDb = new DynamoDB.DocumentClient();
-
-const TABLE_NAME = process.env.TABLE_NAME!;
-if (!TABLE_NAME)
-  throw new Error('TABLE_NAME environment variable is not defined');
+const TABLE_NAME = 'TasksTable';
+const dynamoDb = new DynamoDB.DocumentClient({
+  endpoint: 'http://host.docker.internal:8000',
+});
 
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
   const taskId = event.pathParameters?.taskId as string;
@@ -21,6 +14,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'taskId is required' }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 
@@ -37,6 +31,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       return {
         statusCode: 404,
         body: JSON.stringify({ error: 'Task not found' }),
+        headers: { 'Content-Type': 'application/json' },
       };
     }
 
@@ -52,6 +47,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 204, // No Content
       body: '',
+      headers: { 'Content-Type': 'application/json' },
     };
   } catch (error) {
     console.error(`Error deleting task with taskId ${taskId}:`, error);
@@ -59,6 +55,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Could not delete task' }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 };

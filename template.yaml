@@ -5,6 +5,8 @@ Resources:
     Properties:
       Handler: lambdas/create-task.handler
       Runtime: nodejs16.x
+      MemorySize: 512
+      Timeout: 10
       Events:
         ApiEvent:
           Type: Api
@@ -17,6 +19,8 @@ Resources:
     Properties:
       Handler: lambdas/get-task.handler
       Runtime: nodejs16.x
+      MemorySize: 512
+      Timeout: 10
       Events:
         ApiEvent:
           Type: Api
@@ -29,6 +33,8 @@ Resources:
     Properties:
       Handler: lambdas/update-task.handler
       Runtime: nodejs16.x
+      MemorySize: 512
+      Timeout: 10
       Events:
         ApiEvent:
           Type: Api
@@ -41,6 +47,8 @@ Resources:
     Properties:
       Handler: lambdas/delete-task.handler
       Runtime: nodejs16.x
+      MemorySize: 512
+      Timeout: 10
       Events:
         ApiEvent:
           Type: Api
