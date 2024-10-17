@@ -33,7 +33,7 @@ describe('ServerlessTaskManagerStack', () => {
     expect(stack).toHaveResource('AWS::Lambda::Function', {
       Handler: 'lambdas/create-task.handler',
       Runtime: 'nodejs14.x',
-      MemorySize: 128,
+      MemorySize: 256,
     });
   });
 
@@ -41,7 +41,7 @@ describe('ServerlessTaskManagerStack', () => {
     expect(stack).toHaveResource('AWS::Lambda::Function', {
       Handler: 'lambdas/get-task.handler',
       Runtime: 'nodejs14.x',
-      MemorySize: 128,
+      MemorySize: 256,
     });
   });
 
@@ -50,7 +50,7 @@ describe('ServerlessTaskManagerStack', () => {
     expect(stack).toHaveResource('AWS::Lambda::Function', {
       Handler: 'lambdas/update-task.handler',
       Runtime: 'nodejs14.x',
-      MemorySize: 128,
+      MemorySize: 256,
     });
   });
 
@@ -59,7 +59,7 @@ describe('ServerlessTaskManagerStack', () => {
     expect(stack).toHaveResource('AWS::Lambda::Function', {
       Handler: 'lambdas/delete-task.handler',
       Runtime: 'nodejs14.x',
-      MemorySize: 128,
+      MemorySize: 256,
     });
   });
 
@@ -105,8 +105,8 @@ describe('ServerlessTaskManagerStack', () => {
 
   test('should export the DynamoDB table name', () => {
     expect(stack).toHaveOutput({
-      OutputName: 'TaskTableName',
-      Value: {
+      outputName: 'TaskTableName',
+      outputValue: {
         'Fn::GetAtt': ['TestStackDynamoDBTable', 'Arn'],
       },
     });

@@ -18,7 +18,7 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
     });
 
     const createTaskLambda = new NodejsFunction(this, 'CreateTaskLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: 'handler',
       entry: join(__dirname, '../lambdas/create-task.ts'),
       environment: {
@@ -27,7 +27,7 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
     });
 
     const getTaskLambda = new NodejsFunction(this, 'GetTaskLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: 'handler',
       entry: join(__dirname, '../lambdas/get-task.ts'),
       environment: {
@@ -36,7 +36,7 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
     });
 
     const updateTaskLambda = new NodejsFunction(this, 'UpdateTaskLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: 'handler',
       entry: join(__dirname, '../lambdas/update-task.ts'),
       environment: {
@@ -45,7 +45,7 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
     });
 
     const deleteTaskLambda = new NodejsFunction(this, 'DeleteTaskLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: 'handler',
       entry: join(__dirname, '../lambdas/delete-task.ts'),
       environment: {
@@ -54,7 +54,7 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
     });
 
     tasksTable.grantReadWriteData(createTaskLambda);
-    tasksTable.grantReadData(getTaskLambda);
+    tasksTable.grantReadWriteData(getTaskLambda);
     tasksTable.grantReadWriteData(updateTaskLambda);
     tasksTable.grantReadWriteData(deleteTaskLambda);
 

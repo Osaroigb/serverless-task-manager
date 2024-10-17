@@ -9,12 +9,15 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist && rm -f bin/*.d.ts bin/*.js lambdas/*.d.ts lambdas/*.js lib/*.d.ts lib/*.js test/*.d.ts test/*.js",
+    "sam-cleanup": "rm -rf .aws-sam/",
     "format": "prettier --write \"bin/**/*.ts\" \"lambdas/**/*.ts\" \"lib/**/*.ts\" \"test/**/*.ts\""
   },
   "devDependencies": {
+    "@aws-cdk/assert": "^2.68.0",
     "@types/jest": "^29.5.12",
     "@types/node": "22.5.4",
+    "@types/sinon": "^17.0.3",
     "aws-cdk": "2.162.1",
     "aws-sdk-mock": "^6.2.0",
     "dotenv": "^16.4.5",
