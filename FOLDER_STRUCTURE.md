@@ -7,21 +7,35 @@ SERVERLESS-TASK-MANAGER
 ├── lambdas
 │ │
 │ ├── create-task.ts
-│ └── get-task.ts
-│ 
+│ ├── delete-task.ts
+│ ├── get-task.ts
+│ └── update-task.ts
+│
 ├── lib
 │ │
 │ └── serverless-task-manager-stack.ts
-│ 
+│
 ├── test
 │ │
+│ ├── create-task.test.ts
+│ ├── delete-task.test.ts
+│ ├── get-task.test.ts
+│ ├── update-task.test.ts
 │ └── serverless-task-manager.test.ts
+|
+├── types
+│ │
+│ └── jest.d.ts
 |
 ├── .env.sample
 |
 ├── .gitignore
 |
 ├── .npmignore
+|
+├── .prettierignore
+|
+├── .prettierrc
 |
 ├── cdk.json
 |
