@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
+import * as cdk from '@aws-cdk/core';
 import { ServerlessTaskManagerStack } from '../lib/serverless-task-manager-stack';
 
 const app = new cdk.App();
+const isProd = process.env.NODE_ENV === 'production';
+
 new ServerlessTaskManagerStack(app, 'ServerlessTaskManagerStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
@@ -11,7 +13,8 @@ new ServerlessTaskManagerStack(app, 'ServerlessTaskManagerStack', {
 
   /* Uncomment the next line to specialize this stack for the AWS Account
    * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+  stackName: isProd ? 'ServerlessTaskManagerProd' : 'ServerlessTaskManagerDev',
 
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
