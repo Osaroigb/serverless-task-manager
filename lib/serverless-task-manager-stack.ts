@@ -35,13 +35,33 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
       },
     });
 
+    const updateTaskLambda = new NodejsFunction(this, 'UpdateTaskLambda', {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: join(__dirname, '../lambdas/update-task.ts'),
+      environment: {
+        TABLE_NAME: tasksTable.tableName,
+      },
+    });
+
+    const deleteTaskLambda = new NodejsFunction(this, 'DeleteTaskLambda', {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: join(__dirname, '../lambdas/delete-task.ts'),
+      environment: {
+        TABLE_NAME: tasksTable.tableName,
+      },
+    });
+
     tasksTable.grantReadWriteData(createTaskLambda);
     tasksTable.grantReadData(getTaskLambda);
+    tasksTable.grantReadWriteData(updateTaskLambda);
+    tasksTable.grantReadWriteData(deleteTaskLambda);
 
     // Create API Gateway to expose the POST endpoint
     const api = new apigateway.RestApi(this, 'TasksApi', {
       restApiName: 'Tasks Service',
-      description: 'This service handles task management..',
+      description: 'This service handles task management.',
     });
 
     const tasks = api.root.addResource('tasks');
@@ -49,5 +69,11 @@ export class ServerlessTaskManagerStack extends cdk.Stack {
 
     tasks.addMethod('POST', new apigateway.LambdaIntegration(createTaskLambda));
     taskId.addMethod('GET', new apigateway.LambdaIntegration(getTaskLambda));
+
+    taskId.addMethod('PUT', new apigateway.LambdaIntegration(updateTaskLambda));
+    taskId.addMethod(
+      'DELETE',
+      new apigateway.LambdaIntegration(deleteTaskLambda),
+    );
   }
 }
